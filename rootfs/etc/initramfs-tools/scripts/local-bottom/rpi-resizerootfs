@@ -45,6 +45,9 @@ wait_for_udev 5
 partprobe "$rootdev"
 resize2fs "$rootpart"
 
+# After resizing, (re)check the root partition's filesystem
+fsck "$rootpart"
+
 # Remount root
 # Don't quote ${ROOTFLAGS} as that results in an extra (empty) argument
 # to 'mount', which in turn causes a boot failure
