@@ -139,7 +139,7 @@ else:
 if suite == 'buster':
     touch_machine_id = 'touch /etc/machine-id'
 else:
-    touch_machine_id = ''
+    touch_machine_id = 'echo "uninitialized" > /etc/machine-id'
 
 # Buster shipped timesyncd directly into systemd:
 if suite == 'buster':
