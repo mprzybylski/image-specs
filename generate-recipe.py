@@ -41,7 +41,6 @@ elif version in ['3', '4']:
     dtb = '/usr/lib/linux-image-*-arm64/broadcom/bcm*rpi*.dtb'
 
 # APT and default firmware (name + handling)
-security_suite = '%s-security' % suite
 raspi_firmware = 'raspi-firmware'
 fix_firmware = False
 
@@ -157,7 +156,6 @@ with open('raspi_master.yaml', 'r') as in_file:
             .replace('__FIRMWARE_COMPONENT_OLD__', firmware_component_old) \
             .replace('__LINUX_IMAGE__', linux) \
             .replace('__DTB__', dtb) \
-            .replace('__SECURITY_SUITE__', security_suite) \
             .replace('__SYSTEMD_TIMESYNCD__', systemd_timesyncd) \
             .replace('__RASPI_FIRMWARE__', raspi_firmware) \
             .replace('__WIRELESS_FIRMWARE__', wireless_firmware) \
