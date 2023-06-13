@@ -40,9 +40,6 @@ elif version in ['3', '4']:
     linux = 'linux-image-arm64'
     dtb = '/usr/lib/linux-image-*-arm64/broadcom/bcm*rpi*.dtb'
 
-# APT and default firmware (name + handling)
-fix_firmware = False
-
 # Bookworm introduced the 'non-free-firmware' component¹; before that,
 # raspi-firmware was in 'non-free'
 #
@@ -94,12 +91,6 @@ extra_root_shell_cmds = []
 
 
 ### The following prepares substitutions based on variables set earlier
-
-# Commands to fix the firmware name in the systemd unit:
-if fix_firmware:
-    fix_firmware_cmds = ['sed -i s/raspi-firmware/raspi3-firmware/ ${ROOT?}/etc/systemd/system/rpi-reconfigure-raspi-firmware.service']
-else:
-    fix_firmware_cmds = []
 
 # Enable backports with a reason, or add commented-out entry:
 if backports_enable:
@@ -164,7 +155,6 @@ with open('raspi_master.yaml', 'r') as in_file:
             .replace('__GITCOMMIT__', gitcommit) \
             .replace('__BUILDTIME__', buildtime)
 
-        out_text = align_replace(out_text, '__FIX_FIRMWARE_PKG_NAME__', fix_firmware_cmds)
         out_text = align_replace(out_text, '__EXTRA_ROOT_SHELL_CMDS__', extra_root_shell_cmds)
         out_text = align_replace(out_text, '__EXTRA_CHROOT_SHELL_CMDS__', extra_chroot_shell_cmds)
         out_text = align_replace(out_text, '__BACKPORTS__', backports_stanza.splitlines())
