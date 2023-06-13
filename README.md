@@ -58,7 +58,7 @@ you'll need to execute `make` as root.
 The argument to `make` is constructed as follows:
 `raspi_<model>_<release>.<result-type>`
 
-Whereby <model\> is one of `1`, `2`, `3` or `4`, <release\> is either `buster`,
+Whereby <model\> is one of `1`, `2`, `3` or `4`, <release\> is either
 `bullseye`, `bookworm`, or `trixie`; and <result-type\> is `img` or `yaml`.
 
 Model `1` should be used for the Raspberry Pi 0, 0w and 1, models A and

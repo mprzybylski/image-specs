@@ -18,7 +18,7 @@ if version not in ["1", "2", "3", "4"]:
     sys.exit(1)
 
 suite = sys.argv[2]
-if suite not in ['buster', 'bullseye', 'bookworm', 'trixie']:
+if suite not in ['bullseye', 'bookworm', 'trixie']:
     print("E: unsupported suite %s" % suite, file=sys.stderr)
     sys.exit(1)
 target_yaml = 'raspi_%s_%s.yaml' % (version, suite)
@@ -41,20 +41,15 @@ elif version in ['3', '4']:
     dtb = '/usr/lib/linux-image-*-arm64/broadcom/bcm*rpi*.dtb'
 
 # APT and default firmware (name + handling)
-if suite == 'buster':
-    security_suite = '%s/updates' % suite
-    raspi_firmware = 'raspi3-firmware'
-    fix_firmware = True
-else:
-    security_suite = '%s-security' % suite
-    raspi_firmware = 'raspi-firmware'
-    fix_firmware = False
+security_suite = '%s-security' % suite
+raspi_firmware = 'raspi-firmware'
+fix_firmware = False
 
 # Bookworm introduced the 'non-free-firmware' component¹; before that,
 # raspi-firmware was in 'non-free'
 #
 # ¹ https://www.debian.org/vote/2022/vote_003
-if suite not in ['buster', 'bullseye']:
+if suite != 'bullseye':
     firmware_component = 'non-free-firmware'
     firmware_component_old = 'non-free'
 else:
@@ -76,16 +71,6 @@ else:
 # Pi 4 on buster requires some backports:
 backports_enable = False
 backports_suite = '%s-backports' % suite
-if version == '4' and suite == 'buster':
-    backports_enable = "# raspi 4 needs kernel and firmware newer than buster's"
-    linux = '%s/%s' % (linux, backports_suite)
-    raspi_firmware = 'raspi-firmware/%s' % backports_suite
-    wireless_firmware = 'firmware-brcm80211/%s' % backports_suite
-    fix_firmware = False
-
-if version == '3' and suite == 'buster':
-    backports_enable = "# raspi 3 needs firmware-brcm80211 newer than buster's for wifi"
-    wireless_firmware = 'firmware-brcm80211/%s' % backports_suite
 
 # Serial console:
 if version in ['1', '2']:
@@ -104,10 +89,7 @@ if version == '4':
 # and stick to it!
 #
 # Hostname:
-if suite == 'buster':
-    hostname = 'rpi%s' % version
-else:
-    hostname = 'rpi_%s' % version
+hostname = 'rpi_%s' % version
 
 # Nothing yet!
 extra_root_shell_cmds = []
@@ -136,16 +118,10 @@ else:
 """ % (backports_suite, firmware_component)
 
 # Buster requires an existing, empty /etc/machine-id file:
-if suite == 'buster':
-    touch_machine_id = 'touch /etc/machine-id'
-else:
-    touch_machine_id = 'echo "uninitialized" > /etc/machine-id'
+touch_machine_id = 'echo "uninitialized" > /etc/machine-id'
 
 # Buster shipped timesyncd directly into systemd:
-if suite == 'buster':
-    systemd_timesyncd = 'systemd'
-else:
-    systemd_timesyncd = 'systemd-timesyncd'
+systemd_timesyncd = 'systemd-timesyncd'
 
 gitcommit = subprocess.getoutput("git show -s --pretty='format:%C(auto)%h (%s, %ad)' --date=short ")
 buildtime = subprocess.getoutput("date --utc +'%Y-%m-%d %H:%M'")
