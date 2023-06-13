@@ -18,7 +18,7 @@ if version not in ["1", "2", "3", "4"]:
     sys.exit(1)
 
 suite = sys.argv[2]
-if suite not in ['buster', 'bullseye', 'bookworm']:
+if suite not in ['buster', 'bullseye', 'bookworm', 'trixie']:
     print("E: unsupported suite %s" % suite, file=sys.stderr)
     sys.exit(1)
 target_yaml = 'raspi_%s_%s.yaml' % (version, suite)
@@ -54,7 +54,7 @@ else:
 # raspi-firmware was in 'non-free'
 #
 # ¹ https://www.debian.org/vote/2022/vote_003
-if suite == 'bookworm':
+if suite not in ['buster', 'bullseye']:
     firmware_component = 'non-free-firmware'
     firmware_component_old = 'non-free'
 else:
