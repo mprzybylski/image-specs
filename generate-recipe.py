@@ -104,9 +104,6 @@ else:
 # deb http://deb.debian.org/debian %s main %s
 """ % (backports_suite, firmware_component)
 
-# Buster shipped timesyncd directly into systemd:
-systemd_timesyncd = 'systemd-timesyncd'
-
 gitcommit = subprocess.getoutput("git show -s --pretty='format:%C(auto)%h (%s, %ad)' --date=short ")
 buildtime = subprocess.getoutput("date --utc +'%Y-%m-%d %H:%M'")
 
@@ -141,7 +138,6 @@ with open('raspi_master.yaml', 'r') as in_file:
             .replace('__FIRMWARE_COMPONENT_OLD__', firmware_component_old) \
             .replace('__LINUX_IMAGE__', linux) \
             .replace('__DTB__', dtb) \
-            .replace('__SYSTEMD_TIMESYNCD__', systemd_timesyncd) \
             .replace('__WIRELESS_FIRMWARE__', wireless_firmware) \
             .replace('__BLUETOOTH_FIRMWARE__', bluetooth_firmware) \
             .replace('__SERIAL_CONSOLE__', serial) \
