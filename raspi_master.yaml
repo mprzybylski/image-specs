@@ -79,7 +79,7 @@ steps:
       - wpasupplicant
       - __SYSTEMD_TIMESYNCD__
       - __LINUX_IMAGE__
-      - __RASPI_FIRMWARE__
+      - raspi-firmware
       - __WIRELESS_FIRMWARE__
       - __BLUETOOTH_FIRMWARE__
     tag: tag-root
