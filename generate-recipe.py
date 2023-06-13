@@ -81,9 +81,6 @@ if version == '4':
         "sed -i 's/cma=64M //' /boot/firmware/cmdline.txt",
     ]
 
-# XXX: The disparity between suite seems to be a bug, pick a naming
-# and stick to it!
-#
 # Hostname:
 hostname = 'rpi_%s' % version
 
