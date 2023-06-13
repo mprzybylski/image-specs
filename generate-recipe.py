@@ -104,9 +104,6 @@ else:
 # deb http://deb.debian.org/debian %s main %s
 """ % (backports_suite, firmware_component)
 
-# Buster requires an existing, empty /etc/machine-id file:
-touch_machine_id = 'echo "uninitialized" > /etc/machine-id'
-
 # Buster shipped timesyncd directly into systemd:
 systemd_timesyncd = 'systemd-timesyncd'
 
@@ -149,7 +146,6 @@ with open('raspi_master.yaml', 'r') as in_file:
             .replace('__BLUETOOTH_FIRMWARE__', bluetooth_firmware) \
             .replace('__SERIAL_CONSOLE__', serial) \
             .replace('__HOST__', hostname) \
-            .replace('__TOUCH_MACHINE_ID__', touch_machine_id) \
             .replace('__GITCOMMIT__', gitcommit) \
             .replace('__BUILDTIME__', buildtime)
 

@@ -167,7 +167,7 @@ steps:
   - chroot: tag-root
     shell: |
       rm -f /etc/machine-id /var/lib/dbus/machine-id
-      __TOUCH_MACHINE_ID__
+      echo "uninitialized" > /etc/machine-id
 
   # Create /etc/raspi-image-id to know, from what commit the image was built
   - chroot: tag-root
