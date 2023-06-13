@@ -63,7 +63,8 @@ if version != '2':
 else:
     bluetooth_firmware = ''
 
-# Pi 4 on buster requires some backports:
+# Pi 4 on buster required some backports. Let's keep variables around, ready to
+# be used whenever we need to pull specific things from backports.
 backports_enable = False
 backports_suite = '%s-backports' % suite
 
