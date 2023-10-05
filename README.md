@@ -116,7 +116,7 @@ Alternatively, if you don't have `bmap-tools` installed, you can use
 `dd` with the compressed image:
 
 ```shell
-xzcat raspi_3_bullseye.img | dd of=/dev/mmcblk0 bs=64k oflag=dsync status=progress
+xzcat raspi_3_bullseye.img.xz | dd of=/dev/mmcblk0 bs=64k oflag=dsync status=progress
 ```
 
 Or with the uncompressed image:
