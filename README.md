@@ -33,10 +33,11 @@ Debian Bullseye (11) or higher system:
 * time
 * vmdb2 (>= 0.17)
 * python3
+* zerofree (because of [#1021341](https://bugs.debian.org/1021341))
 
 To install these (as root):
 ```shell
-   apt install -y vmdb2 dosfstools qemu-utils qemu-user-static debootstrap binfmt-support time kpartx bmap-tools python3
+   apt install -y vmdb2 dosfstools qemu-utils qemu-user-static debootstrap binfmt-support time kpartx bmap-tools python3 zerofree
    apt install -y fakemachine
 ```
 
