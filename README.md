@@ -132,3 +132,28 @@ The image uses the hostname `rpi0w`, `rpi2`, `rpi3`, or `rpi4` depending on the
 target build. The provided image will allow you to log in with the
 `root` account with no password set, but only logging in at the
 physical console (be it serial or by USB keyboard and HDMI monitor).
+
+# Print server next steps
+* SSH into the Pi at its static address.  (You _did_ configure public key auth for the root account, right?)
+* Update the root password.
+* Connect the printer via usb
+* Use `lpinfo -v` to get the device URI
+* Use `lpadmin -p InLivingColor -m /path/to/ppd -v usb://Mfr/Device/Uri` to create a printer called "InLivingColor".
+* Use `lpoptions -l InLivingColor` to dump settable options for the printer like paper size, duplexing, etc.
+* i.e...
+  ```text
+  lpadmin -p InLivingColor -m lsb/usr/custom/Xerox_Phaser_6280DN.ppd -v usb://Xerox/Phaser%206280DN?serial=NKA101018 \
+    -o InstalledMemory=256Meg \
+    -o Option1=None \
+    -o Option2=False \
+    -o Duplex=DuplexNoTumble \
+    -o PageSize=Letter
+  cupsenable InLivingColor # To enable the printer
+  cupsaccept InLivingColor # To start accepting jobs for it
+  ```
+* Use `lp -d InLivingColor - <<< "Hello World."` to print a simple, local test page.
+
+# To do:
+* Create the avahi service file to allow AirPrint. Reference:
+  https://www.linuxbabe.com/ubuntu/set-up-cups-print-server-ubuntu-bonjour-ipp-samba-airprint
+  https://www.cups.org/doc/spec-ipp.html looks like the reference for `printer-type`

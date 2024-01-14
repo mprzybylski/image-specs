@@ -83,6 +83,8 @@ steps:
       - raspi-firmware
       - __WIRELESS_FIRMWARE__
       - __BLUETOOTH_FIRMWARE__
+      - cups
+      - avahi-daemon
     tag: tag-root
     unless: rootfs_unpacked
 
@@ -90,7 +92,7 @@ steps:
     unless: rootfs_unpacked
 
   - shell: |
-      echo "__HOST__-$(date +%Y%m%d)" > "${ROOT?}/etc/hostname"
+      echo "print-server-pi" > "${ROOT?}/etc/hostname"
 
       # Allow root logins locally with no password
       sed -i 's,root:[^:]*:,root::,' "${ROOT?}/etc/shadow"
@@ -117,6 +119,14 @@ steps:
       install -m 644 -o root -g root rootfs/etc/systemd/system/rpi-generate-ssh-host-keys.service "${ROOT?}/etc/systemd/system/"
       ln -s /etc/systemd/system/rpi-generate-ssh-host-keys.service "${ROOT?}/etc/systemd/system/multi-user.target.requires/rpi-generate-ssh-host-keys.service"
       rm -f "${ROOT?}"/etc/ssh/ssh_host_*_key*
+      
+      mkdir -p -m 700 "${ROOT?}/root/.ssh"
+      install -m 600 -o root -g root rootfs/root/.ssh/authorized_keys "${ROOT?}/root/.ssh/authorized_keys"
+      
+      mkdir -p "${ROOT?}/usr/share/ppd/custom"
+      install -m 644 -o root -g root rootfs/usr/share/ppd/custom/Xerox_Phaser_6280DN.ppd "${ROOT?}/usr/share/ppd/custom/Xerox_Phaser_6280DN.ppd"
+      
+      install -m 644 -o root -g root rootfs/etc/cups/cupsd.conf "${ROOT?}/etc/cups/cupsd.conf"
 
       __EXTRA_ROOT_SHELL_CMDS__
     root-fs: tag-root
