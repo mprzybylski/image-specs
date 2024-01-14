@@ -190,7 +190,11 @@ manage its network configurations and is connected via WiFi to an SSID called,
 * Enable mDNS resolution for the connection, if it is not already.
   `nmcli conn modify "NSA Surveillance Van" connection.mdns 1`
 
+To do: try to make AirPrint actually usable from iOS devices by updating the Avahi Service file
+based on what can be learned from Apple's Bonjour printing spec.
+
 # References:
 * https://www.linuxbabe.com/ubuntu/set-up-cups-print-server-ubuntu-bonjour-ipp-samba-airprint
 * https://www.cups.org/doc/spec-ipp.html looks like the reference for `printer-type`
 * `avahi.service` man page
+* https://developer.apple.com/bonjour/printing-specification/bonjourprinting-1.2.1.pdf
