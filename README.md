@@ -134,6 +134,7 @@ target build. The provided image will allow you to log in with the
 physical console (be it serial or by USB keyboard and HDMI monitor).
 
 # Print server next steps
+## Setup the printer in CUPS
 * SSH into the Pi at its static address.  (You _did_ configure public key auth for the root account, right?)
 * Update the root password.
 * Connect the printer via usb
@@ -152,8 +153,44 @@ physical console (be it serial or by USB keyboard and HDMI monitor).
   cupsaccept InLivingColor # To start accepting jobs for it
   ```
 * Use `lp -d InLivingColor - <<< "Hello World."` to print a simple, local test page.
+## Configure an Avahi / Bonjour / AirPrint / mDNS-sd service file
+Add the following contents to a file called `/etc/avahi/services/Airprint-InLivingColor.service`
+```
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">AirPrint - InLivingColor @ %h</name>
+  <service>
+    <type>_ipp._tcp</type>
+    <subtype>_universal._sub._ipp._tcp</subtype>
+    <port>631</port>
+    <txt-record>txtvers=1</txt-record>
+    <txt-record>qtotal=1</txt-record>
+    <txt-record>Transparent=T</txt-record>
+    <txt-record>URF=none</txt-record>
+    <txt-record>rp=printers/InLivingColor</txt-record>
+    <txt-record>note=Xerox Phaser 6280DN</txt-record>
+    <txt-record>product=(GPL Ghostscript)</txt-record>
+    <txt-record>printer-state=3</txt-record>
+    <txt-record>printer-type=0x402901f</txt-record>
+    <txt-record>pdl=application/octet-stream,application/pdf,application/postscript,application/vnd.cups-raster,image/gif,image/jpeg,image/png,image/tiff,image/urf,text/html,text/plain,application/vnd.adobe-reader-postscript,application/vnd.cups-pdf</txt-record>
+  </service>
+</service-group>
+```
+...and `systemctl restart avahi-daemon`
 
-# To do:
-* Create the avahi service file to allow AirPrint. Reference:
-  https://www.linuxbabe.com/ubuntu/set-up-cups-print-server-ubuntu-bonjour-ipp-samba-airprint
-  https://www.cups.org/doc/spec-ipp.html looks like the reference for `printer-type`
+### Enable mDNS resolution on a per-connection basis in NetworkManager (Linux)
+Linux can discover your printer advertised via mDNS-sd, but won't be able to
+actually talk to it unless mDNS name resolution is enabled.
+
+This example assumes your workstation or laptop is using NetworkManager to
+manage its network configurations and is connected via WiFi to an SSID called,
+"NSA Surveillance Van".
+* Run `nmcli c show "NSA Surveillance Van"` and examine the `connection.mdns` key
+* Enable mDNS resolution for the connection, if it is not already.
+  `nmcli conn modify "NSA Surveillance Van" connection.mdns 1`
+
+# References:
+* https://www.linuxbabe.com/ubuntu/set-up-cups-print-server-ubuntu-bonjour-ipp-samba-airprint
+* https://www.cups.org/doc/spec-ipp.html looks like the reference for `printer-type`
+* `avahi.service` man page
