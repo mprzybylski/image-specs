@@ -85,6 +85,7 @@ steps:
       - __BLUETOOTH_FIRMWARE__
       - cups
       - avahi-daemon
+      - ntpdate
     tag: tag-root
     unless: rootfs_unpacked
 

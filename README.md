@@ -133,6 +133,11 @@ target build. The provided image will allow you to log in with the
 `root` account with no password set, but only logging in at the
 physical console (be it serial or by USB keyboard and HDMI monitor).
 
+# Post-install next steps
+* Configure `/etc/resolv.conf`
+* Set system date (`ntpdate time.apple.com`)
+* Set time zone (`dpkg-reconfigure tzdata`)
+
 # Print server next steps
 ## Setup the printer in CUPS
 * SSH into the Pi at its static address.  (You _did_ configure public key auth for the root account, right?)
@@ -143,7 +148,7 @@ physical console (be it serial or by USB keyboard and HDMI monitor).
 * Use `lpoptions -l InLivingColor` to dump settable options for the printer like paper size, duplexing, etc.
 * i.e...
   ```text
-  lpadmin -p InLivingColor -m lsb/usr/custom/Xerox_Phaser_6280DN.ppd -v usb://Xerox/Phaser%206280DN?serial=NKA101018 \
+  lpadmin -p InLivingColor -m lsb/usr/custom/Xerox_Phaser_6280DN-custom_media_order.ppd -v usb://Xerox/Phaser%206280DN?serial=NKA101018 \
     -o InstalledMemory=256Meg \
     -o Option1=None \
     -o Option2=False \
